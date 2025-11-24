@@ -1,0 +1,24 @@
+# ---- ENV / Secrets ----
+.env
+*.env
+
+# ---- Airflow / DB runtime state ----
+pgdata/
+logs/
+
+# ---- DBT runtime ----
+dbt/logs/
+dbt/ecommerce_dbt/logs/
+dbt/ecommerce_dbt/target/
+
+# ---- Spark runtime ----
+spark/cache/
+spark/checkpoints/
+spark/output/
+
+# ---- Python cache ----
+__pycache__/
+*.pyc
+
+# ---- Docker / misc ----
+*.log
