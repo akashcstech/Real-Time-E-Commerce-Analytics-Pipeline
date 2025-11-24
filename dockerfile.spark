@@ -1,0 +1,12 @@
+FROM apache/spark:4.0.1-scala
+
+USER root
+
+# Install Python + pip
+RUN apt-get update && apt-get install -y python3 python3-pip
+
+# Install Python libraries required for your Spark job
+RUN pip3 install --no-cache-dir python-dotenv snowflake-connector-python
+
+# Go back to spark user (good practice)
+USER spark

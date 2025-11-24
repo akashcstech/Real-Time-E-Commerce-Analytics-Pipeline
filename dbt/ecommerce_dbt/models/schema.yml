@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: raw
+    database: ECOMMERCE_DB
+    schema: RAW
+    tables:
+      - name: events_raw
+
+models:
+  - name: event_metrics
+    description: "Aggregated user activity metrics"
+  - name: product_metrics
+    description: "Aggregated product performance metrics"

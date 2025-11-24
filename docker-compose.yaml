@@ -1,0 +1,133 @@
+x-airflow-common: &airflow-common
+    build:
+     context: .
+     dockerfile: dockerfile.airflow
+    image: apache/airflow:2.10.2
+    environment:
+      # Use LocalExecutor with Postgres
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
+      # Airflow UI login
+      - _AIRFLOW_WWW_USER_USERNAME=admin
+      - _AIRFLOW_WWW_USER_PASSWORD=admin
+      # Snowflake Credentials
+    #  - SF_URL=${SF_URL}
+    #  - SF_USER=${SF_USER}
+    #  - SF_PASSWORD=${SF_PASSWORD}
+    #  - SF_DATABASE=${SF_DATABASE}
+    #  - SF_SCHEMA=${SF_SCHEMA}
+    #  - SF_WAREHOUSE=${SF_WAREHOUSE}
+    #  - SF_ROLE=${SF_ROLE}
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/scripts:/opt/airflow/scripts
+      - ./dbt:/opt/airflow/dbt
+    user: "${AIRFLOW_UID:-50000}:0"
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0 # Use Confluent’s official Zookeeper image (version 7.6.0).
+    container_name: ecommerce_zookeeper  # Gives the container a readable, fixed name.
+    environment:                         # Set environment variables used by Zookeeper at startup.
+      ZOOKEEPER_CLIENT_PORT: 2181        # Port where clients (Kafka) connect to Zookeeper.
+      ZOOKEEPER_TICK_TIME: 2000          # Internal heartbeat unit (2 seconds) used for coordination.
+    ports:
+      - "2181:2181"                      # Maps container port 2181 → your computer’s port 2181, so Kafka can reach it via zookeeper:2181.
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0   # Official Kafka broker image from Confluent.
+    container_name: ecommerce_kafka      # Easier to refer to the container by name.
+    depends_on:
+      - zookeeper                        # Start Zookeeper first, then Kafka.
+    ports:
+      - "9092:9092"                      # Expose Kafka’s default port 9092 to your computer.
+    
+    environment:                          
+      KAFKA_BROKER_ID: 1                 # Unique ID for this broker (needed if you later add more)
+      
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # Where Kafka finds Zookeeper. The word zookeeper matches the service name above (Docker’s internal DNS).
+      
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,INTERNAL://kafka:29092 # The address Kafka “advertises” to external clients (your Python producer).
+      
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,INTERNAL://0.0.0.0:29092 # The actual address Kafka listens on inside the container. 0.0.0.0 = listen on all interfaces.
+      
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,INTERNAL:PLAINTEXT # Maps the listener name (PLAINTEXT) to its protocol (no SSL/auth).
+      
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL # Defines which listener brokers use to talk to each othe
+      
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  # Internal topic replica count (consumer offsets). Only one broker → replication = 1.
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      interval: 5s
+      retries: 5
+ 
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - airflow-scheduler
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    depends_on:
+       - postgres
+      
+  spark-master:
+    build: 
+      context: .
+      dockerfile: dockerfile.spark
+    image: spark-custom:latest
+    container_name: spark-master
+    environment:
+      SPARK_NO_DAEMONIZE: "true"
+      SPARK_CLASSPATH: "/opt/extra-jars/*"
+    volumes:
+      - ./spark:/opt/airflow/spark       # <-- python scripts, same path as Airflow uses
+      - ./spark/jars:/opt/extra-jars    # <-- downloaded jars (flat .jar files)
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+        --host spark-master
+        --port 7077
+        --webui-port 8080
+    ports:
+      - "7077:7077"
+      - "8083:8080"
+
+  spark-worker:
+    build: 
+      context: .
+      dockerfile: dockerfile.spark
+    image: spark-custom:latest
+    container_name: spark-worker
+    environment:
+      SPARK_NO_DAEMONIZE: "true"
+      SPARK_CLASSPATH: "/opt/extra-jars/*"
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
+        spark://spark-master:7077
+        --webui-port 8081
+    depends_on:
+      - spark-master
+    ports:
+      - "8084:8081"
+    volumes:
+      - ./spark:/opt/spark-app
+      - ./spark/jars:/opt/extra-jars  
+    
