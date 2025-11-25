@@ -193,12 +193,3 @@ This project is currently unlicensed.
 Add a LICENSE file if you want others to use it legally.
 
 ---
-
-If you want, I can also create:
-
-✅ A **full architecture diagram**
-✅ A **dbt documentation site**
-✅ A **pipeline animation**
-✅ A **PDF version** of this documentation
-
-Just tell me!
