@@ -1,7 +1,7 @@
 # Real-Time E-Commerce Analytics Pipeline
 
-A simplified, modular, and production-style real-time analytics pipeline for e-commerce event data.
-It includes data generation, processing, modeling, and orchestration—fully containerized using Docker.
+A simplified, modular, and production-ready real-time analytics pipeline for e-commerce event data.
+It includes data generation, batch processing, streaming processing, dbt modeling, and Airflow orchestration—all fully containerized using Docker.
 
 ---
 
@@ -10,12 +10,14 @@ It includes data generation, processing, modeling, and orchestration—fully con
 This project demonstrates how real-time e-commerce events (clicks, orders, sessions, etc.) flow through a modern analytics pipeline through batch job and streaming job:
 
 1. **Data Simulator** generates fake streaming events
-2. **Spark** processes and transforms these events
-3. **dbt** models analytics tables
-4. **Airflow** orchestrates the entire workflow
-5. Everything runs inside **Docker**
+2. **Spark** processes and transforms these events and data is streamed in each batch
+3. **Snowflake** Snowflake stores raw and processed data
+4. **dbt** models analytics tables
+5. **Airflow** orchestrates the entire workflow
+6. Everything runs inside **Docker**
 
-This architecture mirrors real-world systems used by modern data engineering teams.
+This architecture reflects industry-standard patterns aligns with end-to-end data engineering, combining orchestration, processing, modeling, and warehousing into a unified real-time streaming data
+used by modern data engineering teams to build scalable, low-latency analytics pipelines.
 
 ---
 
@@ -24,9 +26,9 @@ This architecture mirrors real-world systems used by modern data engineering tea
 **Flow:**
 
 ```
-Data Simulator → Spark Processing → Raw/Processed Storage → dbt Models → Analytics Tables
+Data Simulator → Spark Processing → Raw/Processed Storage to snowflake  → dbt Models → Analytics Tables
                        ↑
-                    Orchestrated by Airflow
+                    Orchestrated by Airflow (for batch job only)
 ```
 
 ---
