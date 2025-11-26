@@ -1,10 +1,5 @@
-# Connect spark to snowflake
+# Spark streaming batch & Write to snowflake
 
-# make sure these jars exist:
-# net.snowflake_snowflake-jdbc-3.24.2.jar                    org.apache.spark_spark-sql-kafka-0-10_2.13-4.0.1.jar
-# net.snowflake_spark-snowflake_2.13-3.1.5.jar               org.apache.spark_spark-token-provider-kafka-0-10_2.12-3.3.0.jar
-
-# spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1,net.snowflake:spark-snowflake_2.13:3.1.5 spark/consumer_to_snowflake.py
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
 from pyspark.sql.types import StructType, StringType, DoubleType
