@@ -1,4 +1,4 @@
-# Spark streaming batch & Write to snowflake
+# Spark batch streaming  & Write to snowflake
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
