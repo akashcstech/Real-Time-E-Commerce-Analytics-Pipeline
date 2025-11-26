@@ -1,1 +1,6 @@
 
+# Python version
+python>=3.9
+
+# Docker Desktop
+https://www.docker.com/
