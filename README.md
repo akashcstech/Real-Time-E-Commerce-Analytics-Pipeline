@@ -100,21 +100,21 @@ This launches:
 
 ### 1. Data Simulator
 
-Generates JSON events (clicks, orders, sessions, etc.).
+Generates fake data JSON events (clicks, orders, sessions, etc.).
 
 ### 2. Spark
 
-Ingests events (stream/batch), transforms them, and writes processed outputs.
+Ingests events (stream/batch), transforms them, and writes processed outputs to snowflake.
 
 ### 3. dbt
 
-Builds analytics-ready models (fact tables, dimensions, aggregates).
+Builds analytics-ready models (product_metrics, event_metrics, aggregates etc).
 
 ### 4. Airflow
 
 Orchestrates:
 
-* Data generation
+* Data generation ( manually triggered )
 * Spark processing
 * dbt runs
 * Quality checks
@@ -123,11 +123,11 @@ Orchestrates:
 
 ## 📊 Example Use Cases
 
-* Real-time order analytics
-* User behavior events
-* Product funnel insights
-* Aggregated KPIs
-* Customer metrics
+* Real-time order analytics - Tracking orders as they happen — how many orders, total amount, top products, etc.
+* User behavior events - Understanding what users do on the website or app — clicks, views, searches, add-to-cart actions.
+* Product funnel insights - Measuring how users move from viewing a product → adding to cart → purchasing, and where they drop off.
+* Aggregated KPIs (Key Performance Indicator) - Summarized business metrics like total sales, revenue per hour/day, order success rate, conversion rate.
+* Customer metrics - Information about customers and business, new vs returning users, loyal customers, high spenders, average order value.
 
 ---
 
