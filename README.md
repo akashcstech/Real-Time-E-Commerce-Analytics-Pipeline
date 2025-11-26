@@ -75,7 +75,8 @@ cd Real-Time-E-Commerce-Analytics-Pipeline
 ### 2️⃣ Start all services
 
 ```bash
-docker-compose up --build
+docker-compose up -d
+dokcer-compose up -d < container name > ( start container one by one: low end devices )
 ```
 
 This launches:
