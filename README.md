@@ -83,16 +83,17 @@ This launches:
 
 * Spark Master & Worker
 * Airflow Scheduler & Webserver
-* Data Simulator
+* Kafka & Zookeeper
+* Postgres
 * dbt environment
 
 ### 3️⃣ Access UIs
 
-| Service        | URL                                            |
-| -------------- | ---------------------------------------------- |
-| **Airflow UI** | [http://localhost:8080](http://localhost:8080) |
-| **Spark UI**   | [http://localhost:8081](http://localhost:8081) |
-
+| Service                 | URL                                            |
+| ----------------------- | ---------------------------------------------- |
+| **Airflow UI**          | [http://localhost:8080](http://localhost:8080) |
+| **Spark UI - Master**   | [http://localhost:8081](http://localhost:8081) |
+| **Spark UI - Worker**   | [http://localhost:8081](http://localhost:8081) |
 ---
 
 ## 🔄 Pipeline Workflow
