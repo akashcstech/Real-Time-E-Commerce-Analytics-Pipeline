@@ -190,10 +190,3 @@ Pull requests are welcome!
 Please open an issue for major changes.
 
 ---
-
-## 📄 License
-
-This project is currently unlicensed.
-Add a LICENSE file if you want others to use it legally.
-
----
