@@ -172,7 +172,7 @@ docker exec -it spark-master bash -c '\
     /opt/airflow/spark/consumer_to_snowflake.py \
 '
 ```
-**Run dbt**
+**Run dbt inside container**
 
 ```bash
 cd dbt/ecommerce_dbt
