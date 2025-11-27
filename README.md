@@ -141,8 +141,8 @@ Orchestrates:
 
 ## 🧪 Testing the Pipeline For Batch Job
 
-You can run each component independently:
-
+###  Set the Snowflake Configurations in .env and dbt-profiles.yml
+ 
 **Run simulator only**
 
 ```bash
@@ -157,6 +157,11 @@ python data-simulator/producer.py
 
 **Run Spark jobs inside container for real-time streaming**
 
+
+```bash
+python data-simulator/producer.py
+```
+
 ```bash
 docker exec -it spark-master bash -c '\
   /opt/spark/bin/spark-submit \
@@ -168,7 +173,7 @@ docker exec -it spark-master bash -c '\
 '
 ```
 
----
+
 
 **Run dbt**
 
@@ -177,7 +182,7 @@ cd dbt/ecommerce_dbt
 dbt run
 ```
 
-
+---
 
 ## 🐛 Troubleshooting
 
