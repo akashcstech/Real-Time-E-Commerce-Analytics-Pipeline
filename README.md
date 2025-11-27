@@ -139,7 +139,7 @@ Orchestrates:
 
 ---
 
-## 🧪 Testing the Pipeline
+## 🧪 Testing the Pipeline For Batch Job
 
 You can run each component independently:
 
@@ -150,6 +150,8 @@ python data-simulator/producer.py
 ```
 
 **Then directly trigger dags in airflow UI- localhost:8080**
+
+## 🧪 Testing the Pipeline For Streaming Job
 
 **Run Spark jobs inside container for real-time streaming**
 
