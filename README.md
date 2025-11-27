@@ -155,6 +155,9 @@ python data-simulator/producer.py
 
 **Run Spark jobs inside container for real-time streaming**
 
+
+---
+
 ```bash
 docker exec -it spark-master bash -c '\
   /opt/spark/bin/spark-submit \
