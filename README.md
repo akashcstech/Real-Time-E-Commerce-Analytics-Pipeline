@@ -148,6 +148,20 @@ You can run each component independently:
 ```bash
 python data-simulator/producer.py
 ```
+**Run Spark jobs inside container**
+
+```bash
+docker exec -it spark-master bash -c '\
+  /opt/spark/bin/spark-submit \
+    --master spark://spark-master:7077 \
+    --deploy-mode client \
+    --conf "spark.driver.extraClassPath=/opt/extra-jars/*" \
+    --conf "spark.executor.extraClassPath=/opt/extra-jars/*" \
+    /opt/airflow/spark/consumer_to_snowflake.py \
+'
+```
+
+---
 
 **Run dbt**
 
@@ -156,13 +170,7 @@ cd dbt/ecommerce_dbt
 dbt run
 ```
 
-**Run Spark jobs**
 
-```bash
-spark-submit spark/job.py
-```
-
----
 
 ## 🐛 Troubleshooting
 
