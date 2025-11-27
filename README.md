@@ -93,7 +93,7 @@ This launches:
 | ----------------------- | ---------------------------------------------- |
 | **Airflow UI**          | [http://localhost:8080](http://localhost:8080) |
 | **Spark UI - Master**   | [http://localhost:8081](http://localhost:8081) |
-| **Spark UI - Worker**   | [http://localhost:8081](http://localhost:8081) |
+| **Spark UI - Worker**   | [http://localhost:8082](http://localhost:8082) |
 ---
 
 ## 🔄 Pipeline Workflow
@@ -148,7 +148,10 @@ You can run each component independently:
 ```bash
 python data-simulator/producer.py
 ```
-**Run Spark jobs inside container**
+
+**Then directly trigger dags in airflow UI- localhost:8080**
+
+**Run Spark jobs inside container for real-time streaming**
 
 ```bash
 docker exec -it spark-master bash -c '\
