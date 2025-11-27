@@ -151,12 +151,11 @@ python data-simulator/producer.py
 
 **Then directly trigger dags in airflow UI- localhost:8080**
 
+---
+
 ## 🧪 Testing the Pipeline For Streaming Job
 
 **Run Spark jobs inside container for real-time streaming**
-
-
----
 
 ```bash
 docker exec -it spark-master bash -c '\
