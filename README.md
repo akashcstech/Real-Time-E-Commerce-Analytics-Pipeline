@@ -155,12 +155,12 @@ python data-simulator/producer.py
 
 ## 🧪 Testing the Pipeline For Streaming Job
 
-**Run Spark jobs inside container for real-time streaming**
-
+**Run simulator only**
 
 ```bash
 python data-simulator/producer.py
 ```
+**Run Spark jobs inside container for real-time streaming**
 
 ```bash
 docker exec -it spark-master bash -c '\
@@ -172,9 +172,6 @@ docker exec -it spark-master bash -c '\
     /opt/airflow/spark/consumer_to_snowflake.py \
 '
 ```
-
-
-
 **Run dbt**
 
 ```bash
