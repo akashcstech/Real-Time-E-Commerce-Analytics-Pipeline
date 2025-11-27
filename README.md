@@ -143,7 +143,7 @@ Orchestrates:
 
 ###  Set the Snowflake Configurations in .env and dbt-profiles.yml
  
-**Run simulator only**
+**Run simulator only ( manually triggered )**
 
 ```bash
 python data-simulator/producer.py
@@ -155,7 +155,7 @@ python data-simulator/producer.py
 
 ## 🧪 Testing the Pipeline For Streaming Job
 
-**Run simulator only**
+**Run simulator only ( manually triggered )**
 
 ```bash
 python data-simulator/producer.py
@@ -193,9 +193,6 @@ dbt run
 ---
 
 ## 📌 Future Enhancements
-
-* Option to use Kafka instead of local simulator
-* Add Snowflake or BigQuery as warehouse
 * Add dashboards (Metabase / Looker / Power BI)
 * Add data quality monitoring
 
