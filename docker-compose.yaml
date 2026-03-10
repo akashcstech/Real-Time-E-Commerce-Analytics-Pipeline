@@ -29,35 +29,35 @@ x-airflow-common: &airflow-common
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0 # Use Confluent’s official Zookeeper image (version 7.6.0).
-    container_name: ecommerce_zookeeper  # Gives the container a readable, fixed name.
-    environment:                         # Set environment variables used by Zookeeper at startup.
+    container_name: ecommerce_zookeeper  
+    environment:                         # Environment variables used by Zookeeper at startup.
       ZOOKEEPER_CLIENT_PORT: 2181        # Port where clients (Kafka) connect to Zookeeper.
       ZOOKEEPER_TICK_TIME: 2000          # Internal heartbeat unit (2 seconds) used for coordination.
     ports:
-      - "2181:2181"                      # Maps container port 2181 → your computer’s port 2181, so Kafka can reach it via zookeeper:2181.
+      - "2181:2181"                      # Maps container port 2181 so Kafka can reach it via zookeeper:2181.
 
   kafka:
-    image: confluentinc/cp-kafka:7.6.0   # Official Kafka broker image from Confluent.
-    container_name: ecommerce_kafka      # Easier to refer to the container by name.
+    image: confluentinc/cp-kafka:7.6.0  
+    container_name: ecommerce_kafka      
     depends_on:
       - zookeeper                        # Start Zookeeper first, then Kafka.
     ports:
-      - "9092:9092"                      # Expose Kafka’s default port 9092 to your computer.
+      - "9092:9092"                      # Expose Kafka’s default port 9092.
     
     environment:                          
-      KAFKA_BROKER_ID: 1                 # Unique ID for this broker (needed if you later add more)
+      KAFKA_BROKER_ID: 1                 # Unique ID for this broker.
       
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # Where Kafka finds Zookeeper. The word zookeeper matches the service name above (Docker’s internal DNS).
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 # Where Kafka finds Zookeeper.
       
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,INTERNAL://kafka:29092 # The address Kafka “advertises” to external clients (your Python producer).
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,INTERNAL://kafka:29092 # The address Kafka “advertises” to external clients.
       
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,INTERNAL://0.0.0.0:29092 # The actual address Kafka listens on inside the container. 0.0.0.0 = listen on all interfaces.
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,INTERNAL://0.0.0.0:29092 # The actual address Kafka listens on inside the container.
       
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,INTERNAL:PLAINTEXT # Maps the listener name (PLAINTEXT) to its protocol (no SSL/auth).
       
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL # Defines which listener brokers use to talk to each othe
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL # Defines which listener brokers use to talk to each other.
       
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  # Internal topic replica count (consumer offsets). Only one broker → replication = 1.
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1  # Internal topic replica count (consumer offsets). Only one broker is replication = 1.
 
   postgres:
     image: postgres:15
@@ -99,8 +99,8 @@ services:
       SPARK_NO_DAEMONIZE: "true"
       SPARK_CLASSPATH: "/opt/extra-jars/*"
     volumes:
-      - ./spark:/opt/airflow/spark       # <-- python scripts, same path as Airflow uses
-      - ./spark/jars:/opt/extra-jars    # <-- downloaded jars (flat .jar files)
+      - ./spark:/opt/airflow/spark       # python scripts, same path as Airflow uses.
+      - ./spark/jars:/opt/extra-jars    #  downloaded jars (flat .jar files).
     command: >
       /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
         --host spark-master
